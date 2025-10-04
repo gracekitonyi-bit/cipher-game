@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Crypto Cipher Challenge</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #1e1e2f; color: #f0f0f0; text-align: center; padding: 50px; }
+  input, button { padding: 10px; font-size: 16px; margin: 10px; }
+  .correct { color: #0f0; }
+  .wrong { color: #f00; }
+</style>
+</head>
+<body>
+
+<h1>🔐 Cipher Challenge Game</h1>
+<p>Solve the Caesar Cipher to unlock the secret message!</p>
+
+<div id="level-container">
+  <h2>Level <span id="level-number">1</span></h2>
+  <p id="cipher-text">Loading...</p>
+  <input type="text" id="guess" placeholder="Type your guess here">
+  <button onclick="checkGuess()">Submit</button>
+  <p id="feedback"></p>
+</div>
+
+<script>
+const messages = [
+  "HELLO WORLD",
+  "CRYPTOGRAPHY IS FUN",
+  "KEEP YOUR SECRETS SAFE",
+  "SECURITY FIRST",
+  "ENCRYPT AND DECRYPT"
+];
+let level = 0;
+let shift = 3; // initial Caesar shift
+
+function caesarEncrypt(text, shift) {
+  return text.split('').map(c => {
+    if(c.match(/[A-Z]/)) {
+      return String.fromCharCode((c.charCodeAt(0) - 65 + shift) % 26 + 65);
+    } else if(c.match(/[a-z]/)) {
+      return String.fromCharCode((c.charCodeAt(0) - 97 + shift) % 26 + 97);
+    } else {
+      return c;
+    }
+  }).join('');
+}
+
+function loadLevel() {
+  const cipherText = caesarEncrypt(messages[level], shift + level); // increase shift each level
+  document.getElementById('cipher-text').innerText = cipherText;
+  document.getElementById('guess').value = "";
+  document.getElementById('feedback').innerText = "";
+  document.getElementById('level-number').innerText = level + 1;
+}
+
+function checkGuess() {
+  const userGuess = document.getElementById('guess').value.toUpperCase().trim();
+  if(userGuess === messages[level]) {
+    document.getElementById('feedback').innerText = "✅ Correct!";
+    document.getElementById('feedback').className = "correct";
+    level++;
+    if(level >= messages.length){
+      alert("🎉 Congratulations! You solved all cipher challenges!");
+      level = 0; // restart game
+    }
+    setTimeout(loadLevel, 1000);
+  } else {
+    document.getElementById('feedback').innerText = "❌ Try again!";
+    document.getElementById('feedback').className = "wrong";
+  }
+}
+
+window.onload = loadLevel;
+</script>
+
+</body>
+</html>
