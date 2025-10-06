@@ -28,8 +28,9 @@
     overflow: hidden;
   }
 
-  video {
+  iframe {
     width: 100%;
+    height: 200px;
     border-radius: 10px;
     margin-bottom: 20px;
   }
@@ -88,11 +89,10 @@
 <body>
 
 <div class="game-container">
-  <!-- Video at top -->
-  <video autoplay muted loop>
-    <source src="https://www.w3schools.com/howto/rain.mp4" type="video/mp4">
-    Your browser does not support HTML5 video.
-  </video>
+  <!-- Embedded YouTube video -->
+  <iframe src="https://www.youtube.com/embed/00hpRjfbM0A?autoplay=1&mute=1&loop=1&playlist=00hpRjfbM0A" 
+          frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+  </iframe>
 
   <h1>🔐 Crypto Cipher Challenge</h1>
 
