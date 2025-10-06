@@ -4,24 +4,96 @@
 <meta charset="UTF-8">
 <title>Crypto Cipher Challenge</title>
 <style>
-  body { font-family: Arial, sans-serif; background: #1e1e2f; color: #f0f0f0; text-align: center; padding: 50px; }
-  input, button { padding: 10px; font-size: 16px; margin: 10px; }
-  .correct { color: #0f0; }
-  .wrong { color: #f00; }
+  body { 
+    font-family: 'Segoe UI', sans-serif; 
+    background: #0f172a; 
+    color: #f0f0f0; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    min-height: 100vh; 
+    margin: 0; 
+    flex-direction: column;
+  }
+
+  .game-container {
+    width: 90vw;
+    max-width: 600px;
+    background: #1e293b;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  h1 { font-size: 2rem; margin-bottom: 10px; }
+  h2 { margin: 15px 0; }
+
+  input, button { 
+    padding: 12px; 
+    font-size: 1rem; 
+    margin: 10px 5px; 
+    border-radius: 8px;
+    border: none;
+  }
+
+  button { background: #2563eb; color: white; cursor: pointer; }
+  button:hover { background: #1d4ed8; }
+
+  .correct { color: #22c55e; font-weight: bold; }
+  .wrong { color: #ef4444; font-weight: bold; }
+
+  /* Animation container */
+  .cyber-animation {
+    width: 100px;
+    margin: 20px auto;
+  }
+
+  /* QR code styling */
+  #qrcode {
+    margin-top: 20px;
+  }
+
+  /* Simple bounce animation */
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+
+  .animated-icon {
+    width: 80px;
+    animation: bounce 1s infinite;
+  }
 </style>
 </head>
 <body>
 
-<h1>🔐 Cipher Challenge Game</h1>
-<p>Solve the Caesar Cipher to unlock the secret message!</p>
+<div class="game-container">
+  <h1>🔐 Crypto Cipher Challenge</h1>
 
-<div id="level-container">
-  <h2>Level <span id="level-number">1</span></h2>
-  <p id="cipher-text">Loading...</p>
-  <input type="text" id="guess" placeholder="Type your guess here">
-  <button onclick="checkGuess()">Submit</button>
-  <p id="feedback"></p>
+  <!-- Cybersecurity cartoon animation -->
+  <div class="cyber-animation">
+    <img class="animated-icon" src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Padlock_icon.svg" alt="Cybersecurity Lock">
+  </div>
+
+  <p>Solve the Caesar Cipher to unlock the secret message!</p>
+
+  <div id="level-container">
+    <h2>Level <span id="level-number">1</span></h2>
+    <p id="cipher-text">Loading...</p>
+    <input type="text" id="guess" placeholder="Type your guess here">
+    <button onclick="checkGuess()">Submit</button>
+    <p id="feedback"></p>
+  </div>
+
+  <!-- QR Code -->
+  <div id="qrcode"></div>
 </div>
+
+<!-- QR code library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <script>
 const messages = [
@@ -31,6 +103,7 @@ const messages = [
   "SECURITY FIRST",
   "ENCRYPT AND DECRYPT"
 ];
+
 let level = 0;
 let shift = 3; // initial Caesar shift
 
@@ -70,6 +143,13 @@ function checkGuess() {
     document.getElementById('feedback').className = "wrong";
   }
 }
+
+// Generate QR code for this page
+new QRCode(document.getElementById("qrcode"), {
+  text: window.location.href,
+  width: 120,
+  height: 120
+});
 
 window.onload = loadLevel;
 </script>
