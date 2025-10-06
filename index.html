@@ -20,12 +20,18 @@
     width: 90vw;
     max-width: 600px;
     background: #1e293b;
-    padding: 30px;
+    padding: 20px 30px;
     border-radius: 15px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     text-align: center;
     position: relative;
     overflow: hidden;
+  }
+
+  video {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 20px;
   }
 
   h1 { font-size: 2rem; margin-bottom: 10px; }
@@ -45,35 +51,52 @@
   .correct { color: #22c55e; font-weight: bold; }
   .wrong { color: #ef4444; font-weight: bold; }
 
-  /* Animation container */
   .cyber-animation {
     width: 100px;
     margin: 20px auto;
   }
 
-  /* QR code styling */
   #qrcode {
     margin-top: 20px;
   }
 
-  /* Simple bounce animation */
+  /* Bounce animation for icon */
   @keyframes bounce {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-15px); }
   }
 
-  .animated-icon {
-    width: 80px;
-    animation: bounce 1s infinite;
+  .animated-icon { width: 80px; animation: bounce 1s infinite; }
+
+  /* Floating comment animation */
+  .comment {
+    position: absolute;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffd700;
+    animation: floatUp 1.5s forwards;
+    pointer-events: none;
+    text-shadow: 1px 1px 5px #000;
+  }
+
+  @keyframes floatUp {
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-50px); }
   }
 </style>
 </head>
 <body>
 
 <div class="game-container">
+  <!-- Video at top -->
+  <video autoplay muted loop>
+    <source src="https://www.w3schools.com/howto/rain.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+  </video>
+
   <h1>🔐 Crypto Cipher Challenge</h1>
 
-  <!-- Cybersecurity cartoon animation -->
+  <!-- Cybersecurity cartoon -->
   <div class="cyber-animation">
     <img class="animated-icon" src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Padlock_icon.svg" alt="Cybersecurity Lock">
   </div>
@@ -88,9 +111,12 @@
     <p id="feedback"></p>
   </div>
 
-  <!-- QR Code -->
   <div id="qrcode"></div>
 </div>
+
+<!-- Audio files -->
+<audio id="correct-sound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+<audio id="wrong-sound" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"></audio>
 
 <!-- QR code library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -120,11 +146,20 @@ function caesarEncrypt(text, shift) {
 }
 
 function loadLevel() {
-  const cipherText = caesarEncrypt(messages[level], shift + level); // increase shift each level
+  const cipherText = caesarEncrypt(messages[level], shift + level); 
   document.getElementById('cipher-text').innerText = cipherText;
   document.getElementById('guess').value = "";
   document.getElementById('feedback').innerText = "";
   document.getElementById('level-number').innerText = level + 1;
+}
+
+function showComment(text) {
+  const comment = document.createElement('div');
+  comment.className = 'comment';
+  comment.style.left = `${Math.random() * 70 + 15}%`;
+  comment.innerText = text;
+  document.querySelector('.game-container').appendChild(comment);
+  setTimeout(() => comment.remove(), 1500);
 }
 
 function checkGuess() {
@@ -132,15 +167,19 @@ function checkGuess() {
   if(userGuess === messages[level]) {
     document.getElementById('feedback').innerText = "✅ Correct!";
     document.getElementById('feedback').className = "correct";
+    document.getElementById('correct-sound').play();
+    const comments = ["Excellent!", "Well done!", "Good!", "Amazing!"];
+    showComment(comments[Math.floor(Math.random() * comments.length)]);
     level++;
     if(level >= messages.length){
       alert("🎉 Congratulations! You solved all cipher challenges!");
-      level = 0; // restart game
+      level = 0; 
     }
     setTimeout(loadLevel, 1000);
   } else {
     document.getElementById('feedback').innerText = "❌ Try again!";
     document.getElementById('feedback').className = "wrong";
+    document.getElementById('wrong-sound').play();
   }
 }
 
